@@ -1,0 +1,28 @@
+# Generated pipeline output
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Spark
+metastore_db/
+derby.log
+spark-warehouse/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/

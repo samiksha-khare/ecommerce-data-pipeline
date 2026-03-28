@@ -1,0 +1,13 @@
+masking_rules:
+  - table: dim_customer
+    fields:
+      - column: email
+        strategy: partial_email
+      - column: phone
+        strategy: partial_phone
+      - column: address
+        strategy: redact
+  - table: dim_payment
+    fields:
+      - column: card_number
+        strategy: hash_partial

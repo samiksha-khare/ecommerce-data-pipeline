@@ -1,0 +1,71 @@
+spark:
+  app_name: "ecommerce-pipeline"
+  master: "local[*]"
+  shuffle_partitions: 8
+
+data_sources:
+  orders:
+    path: "data/sample/orders.csv"
+    format: "csv"
+  customers:
+    path: "data/sample/customers.json"
+    format: "json"
+  products:
+    path: "data/sample/products.csv"
+    format: "csv"
+  payments:
+    path: "data/sample/payments.parquet"
+    format: "parquet"
+  shipping:
+    path: "data/sample/shipping.json"
+    format: "json"
+
+quality_checks:
+  orders:
+    - name: deduplication
+      params:
+        subset: ["order_id", "product_id"]
+    - name: null_removal
+      params:
+        columns: ["order_id", "customer_id", "product_id"]
+    - name: non_negative
+      params:
+        columns: ["quantity", "unit_price"]
+    - name: range_validation
+      params:
+        column: "discount_pct"
+        min_val: 0.0
+        max_val: 1.0
+  customers:
+    - name: deduplication
+      params:
+        subset: ["customer_id"]
+    - name: null_removal
+      params:
+        columns: ["customer_id"]
+  products:
+    - name: deduplication
+      params:
+        subset: ["product_id"]
+    - name: non_negative
+      params:
+        columns: ["unit_price", "cost_price"]
+  payments:
+    - name: deduplication
+      params:
+        subset: ["payment_id"]
+    - name: null_removal
+      params:
+        columns: ["payment_id", "order_id"]
+  shipping:
+    - name: deduplication
+      params:
+        subset: ["shipping_id"]
+    - name: null_removal
+      params:
+        columns: ["shipping_id", "order_id"]
+
+output:
+  warehouse_path: "output/warehouse"
+  kpi_path: "output/kpis"
+  format: "parquet"
